@@ -1,5 +1,6 @@
 from tkinter import StringVar, ttk
 from typing import Text
+import requests
 
 from db import DB
 
@@ -8,14 +9,14 @@ class VehicleInfoScreen:
         self.db = DB()
         self.padx = 3
         self.pady = 5
-        self.vehYear = StringVar(value="2010")
-        self.vehMake = StringVar(value="Toyota")
-        self.vehModel = StringVar(value="Tacoma")
-        self.vehEngine = StringVar(value="2.7l")
-        self.vehVin = StringVar(value="12345678901234567")
-        self.vehMileage = StringVar(value="192089")
-        self.vehPlate = StringVar(value="l33t1")
-        self.veh_date_code = StringVar(value="04/10")
+        self.vehYear = StringVar()
+        self.vehMake = StringVar()
+        self.vehModel = StringVar()
+        self.vehEngine = StringVar()
+        self.vehVin = StringVar()
+        self.vehMileage = StringVar()
+        self.vehPlate = StringVar()
+        self.veh_date_code = StringVar()
 
 
         self.lblVehYear = ttk.Label(frame, text="Vehicle Year").grid(column=0, row=0, padx=self.padx, pady=self.pady)
@@ -38,6 +39,7 @@ class VehicleInfoScreen:
 
         self.btnSaveVehicle = ttk.Button(frame, text='Save', command=lambda: self.saveVehicle()).grid(column=3, row=3, padx=self.padx, pady=self.pady)
         self.btnClearVehicle = ttk.Button(frame, text='Clear', command=lambda: self.clearVehicle()).grid(column=4, row=3, padx=self.padx, pady=self.pady)
+        self.btnDecodeVin = ttk.Button(frame, text='Decode', command=lambda: self.decodeVin()).grid(column=5, row=3, padx=self.padx, pady=self.pady)
 
         self.tv = ttk.Treeview(frame)
         self.tv['columns'] = ('VIN', 'Year', 'Make', 'Model', 'Engine', 'Mileage', 'Plate', 'Datecode')
@@ -93,3 +95,18 @@ class VehicleInfoScreen:
         vehicles = self.db.getVehicle()
         for row in vehicles:
             self.tv.insert('', 'end', values=(row.vin, row.year, row.make, row.model, row.engine, row.mileage, row.plate, row.datecode))
+        # self.listVehicle()
+
+    def decodeVin(self):
+
+        vin = self.vehVin.get()
+        r = requests.get(f'https://vpic.nhtsa.dot.gov/api/vehicles/decodevinvaluesextended/{vin}?format=json')
+        result = r.json()['Results'][0]
+
+        # print(result['DisplacementL'])
+
+        self.vehVin.set(value=result['VIN'])
+        self.vehYear.set(value=result['ModelYear'])
+        self.vehMake.set(value=result['Make'])
+        self.vehModel.set(value=result['Model'])
+        self.vehEngine.set(value=f'{result["DisplacementL"]}L')
