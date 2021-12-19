@@ -6,6 +6,5 @@ from sqlalchemy.orm.session import Session
 
 engine = create_engine('sqlite:///worklog.db', echo=True)
 db_session = sessionmaker(bind=engine)
-session = Session(bind=db_session)
+session = Session(bind=engine)
 Base = declarative_base()
-Base.metadata.create_all(bind=engine)

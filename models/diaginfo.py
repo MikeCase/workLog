@@ -11,8 +11,8 @@ class DiagInfo(Base):
     dg_findings = Column('findings', Text)
     dg_custcomp = Column('complaint', Text)
     dg_mil = Column('mil', Boolean)
-    dtc_id = Column(Integer, ForeignKey('DTCs.id'))
-    dtc = relationship('DTCInfo', backref="Diagnostics")
+    # dtc_id = Column(Integer, ForeignKey('DTCs.id'))
+    # dtc = relationship('DTCInfo', backref="Diagnostics")
 
     def __init__(self, findings='', custcomp='', mil=False, dtc=None) -> None:
         self.findings = findings

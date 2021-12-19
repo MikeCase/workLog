@@ -42,15 +42,16 @@ class VehicleInfoScreen:
 
     def saveVehicle(self):
         data = {
-            'year': (str(self.vehYear.get())),
-            'make': (str(self.vehMake.get())),
-            'model': (str(self.vehModel.get())),
-            'engine': (str(self.vehEngine.get())),
-            'vin': (str(self.vehVin.get())),
-            'mileage': (str(self.vehMileage.get())),
-            'plate': (str(self.vehPlate.get())),
-            'datecode': (str(self.veh_date_code.get())),
+            'year': str(self.vehYear.get()),
+            'make': str(self.vehMake.get()),
+            'model': str(self.vehModel.get()),
+            'engine': str(self.vehEngine.get()),
+            'vin': str(self.vehVin.get()),
+            'mileage': str(self.vehMileage.get()),
+            'plate': str(self.vehPlate.get()),
+            'datecode': str(self.veh_date_code.get()),
         }
+        print(type(data))
         self.db.addVehicle(data)
         print('Saving...')
 
