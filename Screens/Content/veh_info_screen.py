@@ -31,14 +31,39 @@ class VehicleInfoScreen:
         self.txtVehMake = ttk.Entry(frame, textvariable=self.vehMake).grid(column=1, row=1, padx=self.padx, pady=self.pady)
         self.txtVehModel = ttk.Entry(frame, textvariable=self.vehModel).grid(column=1, row=2, padx=self.padx, pady=self.pady)
         self.txtVehEngine = ttk.Entry(frame, textvariable=self.vehEngine).grid(column=1, row=3, padx=self.padx, pady=self.pady)
-        self.txtVehVin = ttk.Entry(frame, textvariable=self.vehVin).grid(column=5, row=0, padx=self.padx, pady=self.pady)
-        self.txtVehMileage = ttk.Entry(frame, textvariable=self.vehMileage).grid(column=5, row=1, padx=self.padx, pady=self.pady)
-        self.txtVehPlate = ttk.Entry(frame, textvariable=self.vehPlate).grid(column=5, row=2, padx=self.padx, pady=self.pady)
+        self.txtVehVin = ttk.Entry(frame, textvariable=self.vehVin).grid(column=4, row=0, padx=self.padx, pady=self.pady)
+        self.txtVehMileage = ttk.Entry(frame, textvariable=self.vehMileage).grid(column=4, row=1, padx=self.padx, pady=self.pady)
+        self.txtVehPlate = ttk.Entry(frame, textvariable=self.vehPlate).grid(column=4, row=2, padx=self.padx, pady=self.pady)
         self.txtVehDateCode = ttk.Entry(frame, textvariable=self.veh_date_code).grid(column=7, row=2, padx=self.padx, pady=self.pady)
 
         self.btnSaveVehicle = ttk.Button(frame, text='Save', command=lambda: self.saveVehicle()).grid(column=3, row=3, padx=self.padx, pady=self.pady)
         self.btnClearVehicle = ttk.Button(frame, text='Clear', command=lambda: self.clearVehicle()).grid(column=4, row=3, padx=self.padx, pady=self.pady)
 
+        self.tv = ttk.Treeview(frame)
+        self.tv['columns'] = ('VIN', 'Year', 'Make', 'Model', 'Engine', 'Mileage', 'Plate', 'Datecode')
+        self.tv.column('#0', width=0, stretch='NO')
+        self.tv.column('VIN', anchor='w', width=80)
+        self.tv.column('Year', anchor='center', width=10)
+        self.tv.column('Make', anchor='center', width=60)
+        self.tv.column('Model', anchor='center', width=60)
+        self.tv.column('Engine', anchor='center', width=20)
+        self.tv.column('Mileage', anchor='center', width=40)
+        self.tv.column('Plate', anchor='center', width=20)
+        self.tv.column('Datecode', anchor='w', width=15)
+        
+        self.tv.heading('#0', text='', anchor='center')
+        self.tv.heading('VIN', text='VIN', anchor='center')
+        self.tv.heading('Year', text="Year", anchor='center')
+        self.tv.heading('Make', text="Make", anchor='center')
+        self.tv.heading('Model', text="Model", anchor='center')
+        self.tv.heading('Engine', text="Engine", anchor='center')
+        self.tv.heading('Mileage', text="Mileage", anchor='center')
+        self.tv.heading('Plate', text="Plate", anchor='center')
+        self.tv.heading('Datecode', text="Datecode", anchor='center')
+
+        self.tv.grid(column=0, row=4, columnspan=9, sticky='we')    
+        
+        self.listVehicle()
 
     def saveVehicle(self):
         data = {
@@ -63,3 +88,8 @@ class VehicleInfoScreen:
         str(self.vehVin.set(''))
         str(self.vehMileage.set(''))
         str(self.vehPlate.set(''))
+
+    def listVehicle(self):
+        vehicles = self.db.getVehicle()
+        for row in vehicles:
+            self.tv.insert('', 'end', values=(row.vin, row.year, row.make, row.model, row.engine, row.mileage, row.plate, row.datecode))

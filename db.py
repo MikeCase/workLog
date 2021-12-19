@@ -25,3 +25,8 @@ class DB:
         session.add(new_record)
         session.commit()
         print(f'Added {record}')
+
+    def getVehicle(self):
+        vehicles = session.query(VehInfo).all()
+        return vehicles
+        
