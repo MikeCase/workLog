@@ -19,6 +19,8 @@ class VehicleInfoScreen:
         self.vehPlate = StringVar()
         self.vehDatecode = StringVar()
 
+
+        ## Labels
         self.lblVehYear = ttk.Label(frame, text="Vehicle Year").grid(
             column=0, row=0, padx=self.padx, pady=self.pady)
         self.lblVehMake = ttk.Label(frame, text="Vehicle Make").grid(
@@ -36,6 +38,7 @@ class VehicleInfoScreen:
         self.lblVehDateCode = ttk.Label(frame, text="Vehicle Date Code").grid(
             column=6, row=2, padx=self.padx, pady=self.pady)
 
+        ## Entry boxes
         self.txtVehYear = ttk.Entry(frame, textvariable=self.vehYear).grid(
             column=1, row=0, padx=self.padx, pady=self.pady)
         self.txtVehMake = ttk.Entry(frame, textvariable=self.vehMake).grid(
@@ -52,6 +55,8 @@ class VehicleInfoScreen:
             column=4, row=2, padx=self.padx, pady=self.pady)
         self.txtVehDateCode = ttk.Entry(frame, textvariable=self.vehDatecode).grid(
             column=7, row=2, padx=self.padx, pady=self.pady)
+
+        ## Buttons
         self.btnSaveVehicle = ttk.Button(frame, text='Save', command=lambda: self.saveVehicle(
         )).grid(column=3, row=3, padx=self.padx, pady=self.pady)
         self.btnClearVehicle = ttk.Button(frame, text='Clear', command=lambda: self.clearVehicle(
@@ -59,6 +64,7 @@ class VehicleInfoScreen:
         self.btnDecodeVin = ttk.Button(frame, text='Decode', command=lambda: self.decodeVin(
         )).grid(column=5, row=3, padx=self.padx, pady=self.pady)
 
+        ## Treeview
         self.tv = ttk.Treeview(frame)
 
         self.tv['columns'] = ('VIN', 'Year', 'Make', 'Model',
@@ -83,10 +89,11 @@ class VehicleInfoScreen:
         self.tv.heading('Datecode', text="Datecode", anchor='center')
         self.tv.grid(column=0, row=4, columnspan=9, sticky='we')
         self.tv.bind('<Double-1>', self.onDoubleClick)
+
         self.listVehicle()
 
 
-# Methods
+    # Methods
     def onDoubleClick(self, event):
         item = self.tv.selection()[0]
         self.vehVin.set(value=self.tv.item(item)['values'][0])
@@ -129,8 +136,6 @@ class VehicleInfoScreen:
         for i in self.tv.get_children():
             self.tv.delete(i)
         vehicle = self.listVehicle()
-        # self.tv.insert('', 'end', values=(vehicle.vin, vehicle.year, vehicle.make,
-        #                vehicle.model, vehicle.engine, vehicle.mileage, vehicle.plate, vehicle.datecode))
 
     def listVehicle(self):
         vehicles = self.db.getVehicle()

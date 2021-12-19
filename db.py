@@ -17,7 +17,6 @@ class DB:
         pass
 
     def addVehicle(self, record):
-        # print(record['year'])
         existing_record = session.query(VehInfo).filter_by(vin=record['vin']).first()
         if existing_record:
             existing_record.vin = record['vin']
@@ -34,8 +33,7 @@ class DB:
             new_labor = LaborInfo('First job', 'First job', datetime.now())
             new_record = VehInfo([new_labor], record["vin"], year=record["year"], make=record["make"], model=record["model"],
                                 engine=record["engine"], mileage=record["mileage"], plate=record["plate"], datecode=record["datecode"])
-            # print(new_record.vin)
-            # session.add(new_labor)
+            
             session.add(new_record)
             session.commit()
             print(f'Added {record}')
