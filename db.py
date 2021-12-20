@@ -1,5 +1,6 @@
 from db_conf import *
 from sqlalchemy import desc
+from pprint import pprint
 from datetime import datetime
 from models.vehinfo import VehInfo
 from models.diaginfo import DiagInfo
@@ -17,6 +18,11 @@ class DB:
         pass
 
     def addVehicle(self, record):
+        '''Add or update a vehicle record. 
+           First check to see if a record with the corresponding vin exists, if so 
+           update the record, otherwise create a new record.
+        '''
+
         existing_record = session.query(VehInfo).filter_by(vin=record['vin']).first()
         if existing_record:
             existing_record.vin = record['vin']
@@ -46,3 +52,9 @@ class DB:
         vehicle = session.query(VehInfo).order_by(desc(VehInfo.id)).first()
         if vehicle != None:
             return vehicle
+
+    def getLabor(self):
+        record = session.query(VehInfo).filter_by(id = LaborInfo.vehicle_id).all()
+        if record != None:
+            pprint(record)
+        

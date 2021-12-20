@@ -4,7 +4,7 @@ from tkinter import ttk
 from db import DB
 
 class CompletedScreen:
-    def __init__(self, frame, list_items) -> None:
+    def __init__(self, frame) -> None:
 
         self.db = DB()
         completed_list = self.db.getComplete()

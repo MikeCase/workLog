@@ -4,17 +4,9 @@ from Screens.Content.completed_screen import CompletedScreen
 from Screens.Content.in_progress_screen import InProgressScreen
 from Screens.Content.labor_info_screen import LaborInfoScreen
 from Screens.Content.veh_info_screen import VehicleInfoScreen
-test_list = [
-    'start - finish - car - job',
-    'start - finish - car - job',
-    'start - finish - car - job',
-    'start - finish - car - job',
-    'start - finish - car - job',
-    'start - finish - car - job',
-    'start - finish - car - job',
-    'start - finish - car - job',
 
-]
+
+
 class MainNoteBook:
 
     def __init__(self, root, tabs) -> None:
@@ -31,7 +23,7 @@ class MainNoteBook:
             if tab == "In Progress":
                 InProgressScreen(frame)
             if tab == "Completed":
-                CompletedScreen(frame, test_list)
+                CompletedScreen(frame)
 
             notebook.add(frame, text=tab)
 

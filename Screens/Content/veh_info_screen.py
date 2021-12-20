@@ -1,10 +1,10 @@
-from tkinter import StringVar, ttk
-from typing import Text
+from tkinter import Entry, StringVar, ttk
 import requests
+from Screens.screen_helpers import ScreenHelpers
 
 from db import DB
 
-class VehicleInfoScreen:
+class VehicleInfoScreen(ScreenHelpers):
 
     def __init__(self, frame) -> None:
         self.db = DB()
@@ -36,25 +36,28 @@ class VehicleInfoScreen:
         self.lblVehPlate = ttk.Label(frame, text="Vehicle Plate").grid(
             column=3, row=2, padx=self.padx, pady=self.pady)
         self.lblVehDateCode = ttk.Label(frame, text="Vehicle Date Code").grid(
-            column=6, row=2, padx=self.padx, pady=self.pady)
+            column=5, row=0, padx=self.padx, pady=self.pady)
 
         ## Entry boxes
-        self.txtVehYear = ttk.Entry(frame, textvariable=self.vehYear).grid(
+        self.txtVehYear = Entry(frame, textvariable=self.vehYear).grid(
             column=1, row=0, padx=self.padx, pady=self.pady)
-        self.txtVehMake = ttk.Entry(frame, textvariable=self.vehMake).grid(
+        self.txtVehMake = Entry(frame, textvariable=self.vehMake).grid(
             column=1, row=1, padx=self.padx, pady=self.pady)
-        self.txtVehModel = ttk.Entry(frame, textvariable=self.vehModel).grid(
+        self.txtVehModel = Entry(frame, textvariable=self.vehModel).grid(
             column=1, row=2, padx=self.padx, pady=self.pady)
-        self.txtVehEngine = ttk.Entry(frame, textvariable=self.vehEngine).grid(
+        self.txtVehEngine = Entry(frame, textvariable=self.vehEngine).grid(
             column=1, row=3, padx=self.padx, pady=self.pady)
-        self.txtVehVin = ttk.Entry(frame, textvariable=self.vehVin).grid(
-            column=4, row=0, padx=self.padx, pady=self.pady)
-        self.txtVehMileage = ttk.Entry(frame, textvariable=self.vehMileage).grid(
+        self.txtVehVin = Entry(frame, textvariable=self.vehVin)
+        self.txtVehVin.bind('<KeyRelease>', lambda x: self._to_upper(self.vehVin))
+        self.txtVehVin.grid(column=4, row=0, padx=self.padx, pady=self.pady)
+        self.txtVehMileage = Entry(frame, textvariable=self.vehMileage).grid(
             column=4, row=1, padx=self.padx, pady=self.pady)
-        self.txtVehPlate = ttk.Entry(frame, textvariable=self.vehPlate).grid(
+        self.txtVehPlate = Entry(frame, textvariable=self.vehPlate)
+        self.txtVehPlate.bind('<KeyRelease>', lambda x: self._to_upper(self.vehPlate))
+        self.txtVehPlate.grid(
             column=4, row=2, padx=self.padx, pady=self.pady)
-        self.txtVehDateCode = ttk.Entry(frame, textvariable=self.vehDatecode).grid(
-            column=7, row=2, padx=self.padx, pady=self.pady)
+        self.txtVehDateCode = Entry(frame, textvariable=self.vehDatecode).grid(
+            column=6, row=0, padx=self.padx, pady=self.pady)
 
         ## Buttons
         self.btnSaveVehicle = ttk.Button(frame, text='Save', command=lambda: self.saveVehicle(
@@ -78,6 +81,8 @@ class VehicleInfoScreen:
         self.tv.column('Mileage', anchor='center', width=40)
         self.tv.column('Plate', anchor='center', width=20)
         self.tv.column('Datecode', anchor='w', width=15)
+
+        ## Heading rows
         self.tv.heading('#0', text='', anchor='center')
         self.tv.heading('VIN', text='VIN', anchor='center')
         self.tv.heading('Year', text="Year", anchor='center')
@@ -94,6 +99,9 @@ class VehicleInfoScreen:
 
 
     # Methods
+
+    
+
     def onDoubleClick(self, event):
         item = self.tv.selection()[0]
         self.vehVin.set(value=self.tv.item(item)['values'][0])
@@ -106,7 +114,7 @@ class VehicleInfoScreen:
         self.vehDatecode.set(value=self.tv.item(item)['values'][7])
 
     def saveVehicle(self):
-        
+        # vin = .capitalize()
         data = {
             'year': str(self.vehYear.get()),
             'make': str(self.vehMake.get()),
@@ -146,7 +154,7 @@ class VehicleInfoScreen:
 
     def decodeVin(self):
 
-        vin = self.vehVin.get()
+        vin = str(self.vehVin.get())
         r = requests.get(
             f'https://vpic.nhtsa.dot.gov/api/vehicles/decodevinvaluesextended/{vin}?format=json')
         result = r.json()['Results'][0]
