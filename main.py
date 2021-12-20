@@ -1,5 +1,5 @@
 from tkinter import *
-from Screens.main_screen import MainNoteBook
+from Screens.screen_manager import ScreenManager
 
 def main() -> None:
     root = Tk()
@@ -19,7 +19,7 @@ class Main:
         self.root.title(title)
         self.root.geometry(geom)
         
-        self.notebook = MainNoteBook(self.root, tabs)
+        self.screen_manager = ScreenManager(self.root, tabs)
         self.root.mainloop()
 
 
