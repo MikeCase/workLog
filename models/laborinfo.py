@@ -22,7 +22,7 @@ class LaborInfo(Base):
     
     def __init__(self, job, booktime, start,  diag=None, finish='',) -> None:
         self.job = job
-        self.boottime = booktime
+        self.booktime = booktime
         self.start = start
-        self.finish = finish
+        self.finished = finish
         self.diag = diag
