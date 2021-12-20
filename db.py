@@ -53,6 +53,11 @@ class DB:
         if vehicle != None:
             return vehicle
 
+    def removeVehicle(self, VehicleVin):
+        vehicle = session.query(VehInfo).filter_by(vin = VehicleVin).first()
+        session.delete(vehicle)
+        session.commit()
+
     def getLabor(self):
         record = session.query(VehInfo).filter_by(id = LaborInfo.vehicle_id).all()
         if record != None:

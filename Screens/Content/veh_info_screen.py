@@ -1,6 +1,7 @@
 from tkinter import Entry, StringVar, ttk
 import requests
 from Screens.screen_helpers import ScreenHelpers
+from pprint import pprint
 
 from db import DB
 
@@ -66,6 +67,7 @@ class VehicleInfoScreen(ScreenHelpers):
         )).grid(column=4, row=3, padx=self.padx, pady=self.pady)
         self.btnDecodeVin = ttk.Button(frame, text='Decode', command=lambda: self.decodeVin(
         )).grid(column=5, row=3, padx=self.padx, pady=self.pady)
+        self.btnDeleteRecord = ttk.Button(frame, text='Remove', command=lambda: self._removeVehicle(self.vehVin.get())).grid(column=6, row=3, padx=self.padx, pady=self.pady)
 
         ## Treeview
         self.tv = ttk.Treeview(frame)
@@ -162,6 +164,12 @@ class VehicleInfoScreen(ScreenHelpers):
         # print(result['DisplacementL'])
         self.vehVin.set(value=result['VIN'])
         self.vehYear.set(value=result['ModelYear'])
-        self.vehMake.set(value=result['Make'])
+        self.vehMake.set(value=result['NCSAMake'])
         self.vehModel.set(value=result['Model'])
         self.vehEngine.set(value=f'{result["DisplacementL"]}L')
+
+    def _removeVehicle(self, vin):
+        record = self.tv.selection()[0]
+        vin = self.tv.item(record)['values'][0]
+        self.db.removeVehicle(vin)
+        self._updateVehicleList()
