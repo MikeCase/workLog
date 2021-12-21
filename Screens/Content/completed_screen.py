@@ -3,15 +3,15 @@ from tkinter import ttk
 
 from db import DB
 
-class CompletedScreen:
-    def __init__(self, frame) -> None:
-
+class CompletedScreen(tk.Frame):
+    def __init__(self, parent, controller) -> None:
+        tk.Frame.__init__(self, parent)
         self.db = DB()
         completed_list = self.db.getComplete()
         # print(completed_list)
         self.completed_list_var = tk.StringVar(value=completed_list)
         self.listbox = tk.Listbox(
-            frame,
+            self,
             listvariable=self.completed_list_var,
             height=2,
             selectmode='extended',

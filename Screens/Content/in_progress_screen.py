@@ -1,5 +1,6 @@
-from tkinter import ttk
+import tkinter as tk
 
-class InProgressScreen:
-    def __init__(self, frame) -> None:
-        pass
+class InProgressScreen(tk.Frame):
+    def __init__(self, parent, controller) -> None:
+        tk.Frame.__init__(self, parent)
+        
