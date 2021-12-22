@@ -59,10 +59,11 @@ class DB:
         session.commit()
 
     def getLabor(self, id):
+        print(id)
         record = session.query(VehInfo).filter(VehInfo.labor.any(vehicle_id = id)).all()
         if record != None:
-            print(record[0].labor[0].vehicle_id)
-            print(record[0].labor[0].job)
-            print(record[0].id)
-            return record[0]
+            # print(record[0].labor[0].vehicle_id)
+            # print(record[0].labor[0].job)
+            # print(record[0].id)
+            print(record)
         

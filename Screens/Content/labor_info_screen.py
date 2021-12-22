@@ -15,6 +15,7 @@ class LaborInfoScreen(tk.Frame):
         self.padx = 3
         self.pady = 5
 
+        # print(self.parent.children.get('!vehicleinfoscreen').get_vin().get())
         self.laborDesc = StringVar()
         self.laborBookTime = StringVar()
         self.laborStartTime = StringVar()
@@ -46,9 +47,23 @@ class LaborInfoScreen(tk.Frame):
 
 
     def _initScreen(self):
-        pass
-        # laborRecord = self.db.getLabor(vin)
-        # self.laborDesc.set(laborRecord.labor[0].job)
-        # self.laborBookTime.set(laborRecord.labor[0].booktime)
-        # self.laborStartTime.set(laborRecord.labor[0].start)
-        # self.laborFin.set(laborRecord.labor[0].finished)
+        vin = self.veh_vin()
+        if vin:
+            laborRecord = self.db.getLabor(vin)
+            self.laborDesc.set(laborRecord.labor[0].job)
+            self.laborBookTime.set(laborRecord.labor[0].booktime)
+            self.laborStartTime.set(laborRecord.labor[0].start)
+            self.laborFin.set(laborRecord.labor[0].finished)
+
+    def _update_screen(self):
+        vin = self.veh_vin()
+        if vin:
+            laborRecord = self.db.getLabor(vin)
+            print(laborRecord)
+            # self.laborDesc.set(laborRecord.labor[0].job)
+            # self.laborBookTime.set(laborRecord.labor[0].booktime)
+            # self.laborStartTime.set(laborRecord.labor[0].start)
+            # self.laborFin.set(laborRecord.labor[0].finished)
+
+    def veh_vin(self):
+        return self.parent.children.get('!vehicleinfoscreen').get_vin().get()

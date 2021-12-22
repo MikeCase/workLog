@@ -10,7 +10,17 @@ from db import DB
 class VehicleInfoScreen(tk.Frame):
     def __init__(self, parent, controller) -> None:
         tk.Frame.__init__(self, parent)
-        pprint(dir(parent))
+        # pprint(dir(parent))
+        treeview_cols = (
+            'VIN',
+            'Year',
+            'Make',
+            'Model',
+            'Engine',
+            'Mileage',
+            'Plate',
+            'Datecode'
+            )
         self.parent = parent
         self.db = DB()
         self.padx = 3
@@ -48,42 +58,46 @@ class VehicleInfoScreen(tk.Frame):
 
         ## Buttons
         self.button(self, text='Save', command=lambda: self.saveVehicle(), gridcol=3, gridrow=3)
-        self.button(self, text='Clear', command=lambda: self.clearVehicle(), gridcol=4, gridrow=3)
+        self.button(self, text='Clear', command=lambda: self._clearVehicle(), gridcol=4, gridrow=3)
         self.button(self, text='Decode', command=lambda: self.decodeVin(), gridcol=5, gridrow=3)
         self.button(self, text='Remove', command=lambda: self._removeVehicle(self.vehVin.get()), gridcol=6, gridrow=3)
 
         ## Treeview
-        self.tv = ttk.Treeview(self)
 
-        self.tv['columns'] = ('VIN', 'Year', 'Make', 'Model',
-                      'Engine', 'Mileage', 'Plate', 'Datecode')
-        self.tv.column('#0', width=0, stretch='NO')
-        self.tv.column('VIN', anchor='w', width=80)
-        self.tv.column('Year', anchor='center', width=10)
-        self.tv.column('Make', anchor='center', width=60)
-        self.tv.column('Model', anchor='center', width=60)
-        self.tv.column('Engine', anchor='center', width=20)
-        self.tv.column('Mileage', anchor='center', width=40)
-        self.tv.column('Plate', anchor='center', width=20)
-        self.tv.column('Datecode', anchor='w', width=15)
-
-        ## Heading rows
-        self.tv.heading('#0', text='', anchor='center')
-        self.tv.heading('VIN', text='VIN', anchor='center')
-        self.tv.heading('Year', text="Year", anchor='center')
-        self.tv.heading('Make', text="Make", anchor='center')
-        self.tv.heading('Model', text="Model", anchor='center')
-        self.tv.heading('Engine', text="Engine", anchor='center')
-        self.tv.heading('Mileage', text="Mileage", anchor='center')
-        self.tv.heading('Plate', text="Plate", anchor='center')
-        self.tv.heading('Datecode', text="Datecode", anchor='center')
-        self.tv.bind('<Double-1>', self.onDoubleClick)
-        self.tv.grid(column=0, row=4, columnspan=9, sticky='we')
+        self.tv = self.makeTreeView(self, treeview_cols)
+        
 
         self.listVehicle()
 
 
     # Methods
+
+    def makeTreeView(self, parent, cols, ):
+        tv = ttk.Treeview(parent)
+        tv['columns'] = cols
+        tv.column('#0', width=0, stretch='NO')
+        tv.column('VIN', anchor='w', width=80)
+        tv.column('Year', anchor='center', width=10)
+        tv.column('Make', anchor='center', width=60)
+        tv.column('Model', anchor='center', width=60)
+        tv.column('Engine', anchor='center', width=20)
+        tv.column('Mileage', anchor='center', width=40)
+        tv.column('Plate', anchor='center', width=20)
+        tv.column('Datecode', anchor='w', width=15)
+
+        ## Heading rows
+        tv.heading('#0', text='', anchor='center')
+        tv.heading('VIN', text='VIN', anchor='center')
+        tv.heading('Year', text="Year", anchor='center')
+        tv.heading('Make', text="Make", anchor='center')
+        tv.heading('Model', text="Model", anchor='center')
+        tv.heading('Engine', text="Engine", anchor='center')
+        tv.heading('Mileage', text="Mileage", anchor='center')
+        tv.heading('Plate', text="Plate", anchor='center')
+        tv.heading('Datecode', text="Datecode", anchor='center')
+        tv.bind('<Double-1>', self.onDoubleClick)
+        tv.grid(column=0, row=4, columnspan=9, sticky='we')
+        return tv
 
     def button(self, parent, text, command, gridrow, gridcol):
         button = ttk.Button(parent, text=text, command=command)
@@ -115,7 +129,7 @@ class VehicleInfoScreen(tk.Frame):
         self.vehMileage.set(value=self.tv.item(item)['values'][5])
         self.vehPlate.set(value=self.tv.item(item)['values'][6])
         self.vehDatecode.set(value=self.tv.item(item)['values'][7])
-        # self.getLabor(self.tv.item(item)['values'][0])
+        self.parent.children.get('!laborinfoscreen')._update_screen()
 
     def saveVehicle(self):
         # vin = .capitalize()
@@ -135,7 +149,7 @@ class VehicleInfoScreen(tk.Frame):
         # print('Saving...')
         self._updateVehicleList()
 
-    def clearVehicle(self):
+    def _clearVehicle(self):
         str(self.vehYear.set(''))
         str(self.vehMake.set(''))
         str(self.vehModel.set(''))
@@ -176,3 +190,9 @@ class VehicleInfoScreen(tk.Frame):
         vin = self.tv.item(record)['values'][0]
         self.db.removeVehicle(vin)
         self._updateVehicleList()
+
+    def get_vin(self):
+        return self.vehVin
+
+    def set_vin(self, newVin):
+        self.vehVin = newVin
