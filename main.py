@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-# from Screens.screen_manager import ScreenManager
 from Screens.Content.veh_info_screen import VehicleInfoScreen
 from Screens.Content.labor_info_screen import LaborInfoScreen
 from Screens.Content.in_progress_screen import InProgressScreen

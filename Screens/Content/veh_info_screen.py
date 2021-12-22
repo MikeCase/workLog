@@ -1,18 +1,20 @@
 import tkinter as tk
 from tkinter import Entry, StringVar, ttk
 import requests
+from sqlalchemy.sql.expression import column
 # from Screens.screen_helpers import ScreenHelpers
-# from pprint import pprint
+from pprint import pprint
 
 from db import DB
 
 class VehicleInfoScreen(tk.Frame):
     def __init__(self, parent, controller) -> None:
         tk.Frame.__init__(self, parent)
+        pprint(dir(parent))
         self.parent = parent
         self.db = DB()
-        padx = 3
-        pady = 5
+        self.padx = 3
+        self.pady = 5
         self.vehYear = StringVar()
         self.vehMake = StringVar()
         self.vehModel = StringVar()
@@ -21,55 +23,34 @@ class VehicleInfoScreen(tk.Frame):
         self.vehMileage = StringVar()
         self.vehPlate = StringVar()
         self.vehDatecode = StringVar()
+        
 
 
         ## Labels
-        lblVehYear = ttk.Label(self, text="Vehicle Year").grid(
-            column=0, row=0, padx=padx, pady=pady)
-        lblVehMake = ttk.Label(self, text="Vehicle Make").grid(
-            column=0, row=1, padx=padx, pady=pady)
-        lblVehModel = ttk.Label(self, text="Vehicle Model").grid(
-            column=0, row=2, padx=padx, pady=pady)
-        lblVehEngine = ttk.Label(self, text="Vehicle Engine").grid(
-            column=0, row=3, padx=padx, pady=pady)
-        lblVehVin = ttk.Label(self, text="Vehicle Vin").grid(
-            column=3, row=0, padx=padx, pady=pady)
-        lblVehMileage = ttk.Label(self, text="Vehicle Mileage").grid(
-            column=3, row=1, padx=padx, pady=pady)
-        lblVehPlate = ttk.Label(self, text="Vehicle Plate").grid(
-            column=3, row=2, padx=padx, pady=pady)
-        lblVehDateCode = ttk.Label(self, text="Vehicle Date Code").grid(
-            column=5, row=0, padx=padx, pady=pady)
+        self.label(self, text="Vehicle Year",column=0, row=0)
+        self.label(self, text="Vehicle Make", column=0, row=1)
+        self.label(self, text="Vehicle Model", column=0, row=2)
+        self.label(self, text="Vehicle Engine", column=0, row=3)
+        self.label(self, text="Vehicle Vin", column=3, row=0)
+        self.label(self, text="Vehicle Mileage", column=3, row=1)
+        self.label(self, text="Vehicle Plate", column=3, row=2)
+        self.label(self, text="Vehicle Date Code", column=5, row=0)
 
         ## Entry boxes
-        txtVehYear = Entry(self, textvariable=self.vehYear).grid(
-            column=1, row=0, padx=padx, pady=pady)
-        txtVehMake = Entry(self, textvariable=self.vehMake).grid(
-            column=1, row=1, padx=padx, pady=pady)
-        txtVehModel = Entry(self, textvariable=self.vehModel).grid(
-            column=1, row=2, padx=padx, pady=pady)
-        txtVehEngine = Entry(self, textvariable=self.vehEngine).grid(
-            column=1, row=3, padx=padx, pady=pady)
-        txtVehVin = Entry(self, textvariable=self.vehVin)
-        txtVehVin.bind('<KeyRelease>', lambda x: self._to_upper(vehVin))
-        txtVehVin.grid(column=4, row=0, padx=padx, pady=pady)
-        txtVehMileage = Entry(self, textvariable=self.vehMileage).grid(
-            column=4, row=1, padx=padx, pady=pady)
-        txtVehPlate = Entry(self, textvariable=self.vehPlate)
-        txtVehPlate.bind('<KeyRelease>', lambda x: self._to_upper(vehPlate))
-        txtVehPlate.grid(
-            column=4, row=2, padx=padx, pady=pady)
-        txtVehDateCode = Entry(self, textvariable=self.vehDatecode).grid(
-            column=6, row=0, padx=padx, pady=pady)
+        self.textEntry(self, textvar=self.vehYear, column=1, row=0)
+        self.textEntry(self, textvar=self.vehMake, column=1, row=1)
+        self.textEntry(self, textvar=self.vehModel, column=1, row=2)
+        self.textEntry(self, textvar=self.vehEngine, column=1, row=3)
+        self.textEntry(self, textvar=self.vehVin, column=4, row=0, binder='toUpper')
+        self.textEntry(self, textvar=self.vehMileage, column=4, row=1)
+        self.textEntry(self, textvar=self.vehPlate, column=4, row=2, binder='toUpper')
+        self.textEntry(self, textvar=self.vehDatecode, column=6, row=0)
 
         ## Buttons
-        btnSaveVehicle = ttk.Button(self, text='Save', command=lambda: self.saveVehicle(
-        )).grid(column=3, row=3, padx=padx, pady=pady)
-        btnClearVehicle = ttk.Button(self, text='Clear', command=lambda: self.clearVehicle(
-        )).grid(column=4, row=3, padx=padx, pady=pady)
-        btnDecodeVin = ttk.Button(self, text='Decode', command=lambda: self.decodeVin(
-        )).grid(column=5, row=3, padx=padx, pady=pady)
-        btnDeleteRecord = ttk.Button(self, text='Remove', command=lambda: self._removeVehicle(self.vehVin.get())).grid(column=6, row=3, padx=padx, pady=pady)
+        self.button(self, text='Save', command=lambda: self.saveVehicle(), gridcol=3, gridrow=3)
+        self.button(self, text='Clear', command=lambda: self.clearVehicle(), gridcol=4, gridrow=3)
+        self.button(self, text='Decode', command=lambda: self.decodeVin(), gridcol=5, gridrow=3)
+        self.button(self, text='Remove', command=lambda: self._removeVehicle(self.vehVin.get()), gridcol=6, gridrow=3)
 
         ## Treeview
         self.tv = ttk.Treeview(self)
@@ -96,13 +77,30 @@ class VehicleInfoScreen(tk.Frame):
         self.tv.heading('Mileage', text="Mileage", anchor='center')
         self.tv.heading('Plate', text="Plate", anchor='center')
         self.tv.heading('Datecode', text="Datecode", anchor='center')
-        self.tv.grid(column=0, row=4, columnspan=9, sticky='we')
         self.tv.bind('<Double-1>', self.onDoubleClick)
+        self.tv.grid(column=0, row=4, columnspan=9, sticky='we')
 
         self.listVehicle()
 
 
     # Methods
+
+    def button(self, parent, text, command, gridrow, gridcol):
+        button = ttk.Button(parent, text=text, command=command)
+        button.grid(column=gridcol, row=gridrow, padx=self.padx, pady=self.pady)
+
+    def label(self, parent, text, row, column, binder=None):
+        label = ttk.Label(parent, text=text)
+
+        label.grid(row=row, column=column, padx=self.padx, pady=self.pady)
+        return label
+
+    def textEntry(self, parent, textvar, row, column, binder=None):
+        textEntry = Entry(parent, textvariable=textvar)
+        if binder and binder == "toUpper":
+            textEntry.bind('<KeyRelease>', lambda x: self._to_upper(textvar))
+        textEntry.grid(row=row, column=column, padx=self.padx, pady=self.pady)
+        return textEntry
 
     def _to_upper(self, *args):
         args[0].set(args[0].get().upper())
@@ -117,7 +115,7 @@ class VehicleInfoScreen(tk.Frame):
         self.vehMileage.set(value=self.tv.item(item)['values'][5])
         self.vehPlate.set(value=self.tv.item(item)['values'][6])
         self.vehDatecode.set(value=self.tv.item(item)['values'][7])
-        self.getLabor(self.tv.item(item)['values'][0])
+        # self.getLabor(self.tv.item(item)['values'][0])
 
     def saveVehicle(self):
         # vin = .capitalize()
