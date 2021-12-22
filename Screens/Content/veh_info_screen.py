@@ -5,12 +5,27 @@ from sqlalchemy.sql.expression import column
 # from Screens.screen_helpers import ScreenHelpers
 from pprint import pprint
 
-from db import DB
+# from db import DB
 
 class VehicleInfoScreen(tk.Frame):
-    def __init__(self, parent, controller) -> None:
+    def __init__(self, parent, controller, db) -> None:
         tk.Frame.__init__(self, parent)
         # pprint(dir(parent))
+        self.parent = parent
+        self.controller = controller
+        self.db = db
+        self.padx = 3
+        self.pady = 5
+        
+        self.vehYear = StringVar()
+        self.vehMake = StringVar()
+        self.vehModel = StringVar()
+        self.vehEngine = StringVar()
+        self.vehVin = StringVar()
+        self.vehMileage = StringVar()
+        self.vehPlate = StringVar()
+        self.vehDatecode = StringVar()
+        
         treeview_cols = (
             'VIN',
             'Year',
@@ -21,19 +36,6 @@ class VehicleInfoScreen(tk.Frame):
             'Plate',
             'Datecode'
             )
-        self.parent = parent
-        self.db = DB()
-        self.padx = 3
-        self.pady = 5
-        self.vehYear = StringVar()
-        self.vehMake = StringVar()
-        self.vehModel = StringVar()
-        self.vehEngine = StringVar()
-        self.vehVin = StringVar()
-        self.vehMileage = StringVar()
-        self.vehPlate = StringVar()
-        self.vehDatecode = StringVar()
-        
 
 
         ## Labels

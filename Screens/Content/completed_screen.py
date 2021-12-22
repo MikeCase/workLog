@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 
-from db import DB
+# from db import DB
 
 class CompletedScreen(tk.Frame):
-    def __init__(self, parent, controller) -> None:
+    def __init__(self, parent, controller, db) -> None:
         tk.Frame.__init__(self, parent)
-        self.db = DB()
+        self.db = db
         completed_list = self.db.getComplete()
         # print(completed_list)
         self.completed_list_var = tk.StringVar(value=completed_list)

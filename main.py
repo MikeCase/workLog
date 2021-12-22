@@ -4,11 +4,12 @@ from Screens.Content.veh_info_screen import VehicleInfoScreen
 from Screens.Content.labor_info_screen import LaborInfoScreen
 from Screens.Content.in_progress_screen import InProgressScreen
 from Screens.Content.completed_screen import CompletedScreen
-
+from db import DB
 
 class Main(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+        self.db = DB()
         container = ttk.Notebook(self)
         container.pack(fill='both', expand=True)
         container.grid_rowconfigure(0, weight=1)
@@ -16,7 +17,7 @@ class Main(tk.Tk):
 
         self.frames = {}
         for F in (VehicleInfoScreen, LaborInfoScreen, InProgressScreen, CompletedScreen):
-            frame = F(container, self)
+            frame = F(container, self, self.db)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky='nsew')
             if F == VehicleInfoScreen:
