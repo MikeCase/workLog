@@ -9,6 +9,8 @@ from db import DB
 class Main(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+        tk.Tk.title(self, "Mechanics Work Log")
+        # tk.Tk.iconphoto()
         self.db = DB()
         container = ttk.Notebook(self)
         container.pack(fill='both', expand=True)

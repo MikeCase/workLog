@@ -6,7 +6,15 @@ from pprint import pprint
 
 
 class VehicleInfoScreen(tk.Frame):
+    
     def __init__(self, parent, controller, db) -> None:
+        """Vehicle Info Screen
+
+        Args:
+            parent (tk.Widget): Parent Widget
+            controller ([type]): [description]
+            db ([type]): [description]
+        """
         tk.Frame.__init__(self, parent)
         self.parent = parent
         self.controller = controller
@@ -84,7 +92,7 @@ class VehicleInfoScreen(tk.Frame):
 
         ## Treeview
 
-        self.tv = self.makeTreeView(self, tv_cols, width=tv_widths)
+        self.tv = self.makeTreeView(self, tv_cols, anchor=tv_anchors, width=tv_widths, binder=['<Double-1>', self.onDoubleClick])
         
 
         self.listVehicle()
@@ -93,49 +101,63 @@ class VehicleInfoScreen(tk.Frame):
     # Methods
 
     def makeTreeView(self, *args, **kwargs):
+        """Create TreeView Widget to be displayed in frame
+
+        Returns:
+            ttk.TreeView: TreeView Widget
+        """
+
         parent = args[0]
         cols=args[1]
 
-        ## Fails if not defined, obviously.. 
-        ## Maybe a try statement and if that fails catch 
-        ## the KeyError and fill in the values w/a default?
         try:
             a = kwargs['anchor']
         except KeyError:
-            a = [a.append('center') for i in range(len(cols))]
+            a = []
+            for _, i in enumerate(cols):
+                a.append('center')
 
-        # if kwargs['anchor']:
-        #     a = kwargs['anchor']
-        # else:
-        #     a = []
-        #     for i in cols.len():
-        #         a.append('center')
-
-        ## same as above.
-        if kwargs['width']:
+        try:
             w = kwargs['width']
-        else:
+        except:
             w = []
-            for i in cols.len():
+            for _, i in enumerate(cols):
                 w.append('40')
-            
-            
+
+        ## Build TreeView widget            
         tv = ttk.Treeview(parent)
+
+        ## TreeView Columns
         tv['columns'] = cols
         tv.column('#0', width=0, stretch='NO')
         for idx, col in enumerate(cols):
-            tv.column(col, anchor=b[idx], width=w[idx])
+            tv.column(col, anchor=a[idx], width=w[idx])
 
         ## Heading rows
         tv.heading('#0', text='', anchor='center')
         for idx, col in enumerate(cols):
             tv.heading(col, text=col, anchor=a[idx])
 
-        tv.bind('<Double-1>', self.onDoubleClick)
+        try:
+            tv.bind(kwargs['binder'][0], kwargs['binder'][1])
+        except:
+            pass
+        
+        ## Apply grid positioning
         tv.grid(column=0, row=4, columnspan=9, sticky='we')
+
         return tv
 
     def button(self, parent, text, command, gridrow, gridcol):
+        """Creates a button Widget to be displayed in frame.
+
+        Args:
+            parent ([tk.Frame]): tk.Frame element
+            text ([str]): String to be displayed
+            command ([callback]): command to call
+            gridrow ([int]): row number
+            gridcol ([int]): column number
+        """
         button = ttk.Button(parent, text=text, command=command)
         button.grid(column=gridcol, row=gridrow, padx=self.padx, pady=self.pady)
 
@@ -153,9 +175,17 @@ class VehicleInfoScreen(tk.Frame):
         return textEntry
 
     def _to_upper(self, *args):
+        """Helper method to capitalize text entered into Entry Widget
+
+        """
         args[0].set(args[0].get().upper())
 
     def onDoubleClick(self, event):
+        """Helper method for double clicking on a treeview row.
+
+        Args:
+            event (tk.event): Not used
+        """
         item = self.tv.selection()[0]
         self.vehVin.set(value=self.tv.item(item)['values'][0])
         self.vehYear.set(value=self.tv.item(item)['values'][1])
