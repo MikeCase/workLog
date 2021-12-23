@@ -2,15 +2,12 @@ import tkinter as tk
 from tkinter import Entry, StringVar, ttk
 import requests
 from sqlalchemy.sql.expression import column
-# from Screens.screen_helpers import ScreenHelpers
 from pprint import pprint
 
-# from db import DB
 
 class VehicleInfoScreen(tk.Frame):
     def __init__(self, parent, controller, db) -> None:
         tk.Frame.__init__(self, parent)
-        # pprint(dir(parent))
         self.parent = parent
         self.controller = controller
         self.db = db
@@ -26,7 +23,7 @@ class VehicleInfoScreen(tk.Frame):
         self.vehPlate = StringVar()
         self.vehDatecode = StringVar()
         
-        treeview_cols = (
+        tv_cols = (
             'VIN',
             'Year',
             'Make',
@@ -37,6 +34,27 @@ class VehicleInfoScreen(tk.Frame):
             'Datecode'
             )
 
+        tv_anchors = (
+            'w',
+            'center',
+            'center',
+            'center',
+            'center',
+            'center',
+            'center',
+            'w'
+        )
+
+        tv_widths = (
+            80, 
+            10,
+            60,
+            60,
+            20,
+            40,
+            20,
+            15,
+        )
 
         ## Labels
         self.label(self, text="Vehicle Year",column=0, row=0)
@@ -66,7 +84,7 @@ class VehicleInfoScreen(tk.Frame):
 
         ## Treeview
 
-        self.tv = self.makeTreeView(self, treeview_cols)
+        self.tv = self.makeTreeView(self, tv_cols, anchor=tv_anchors, width=tv_widths)
         
 
         self.listVehicle()
@@ -74,29 +92,40 @@ class VehicleInfoScreen(tk.Frame):
 
     # Methods
 
-    def makeTreeView(self, parent, cols, ):
+    def makeTreeView(self, *args, **kwargs):
+        parent = args[0]
+        cols=args[1]
+
+        ## Fails if not defined, obviously.. 
+        ## Maybe a try statement and if that fails catch 
+        ## the KeyError and fill in the values w/a default?
+        if kwargs['anchor']:
+            a = kwargs['anchor']
+        else:
+            a = []
+            for i in cols.len():
+                a.append('center')
+
+        ## same as above.
+        if kwargs['width']:
+            w = kwargs['width']
+        else:
+            w = []
+            for i in cols.len():
+                w.append('40')
+            
+            
         tv = ttk.Treeview(parent)
         tv['columns'] = cols
         tv.column('#0', width=0, stretch='NO')
-        tv.column(cols[0], anchor='w', width=80)
-        tv.column(cols[1], anchor='center', width=10)
-        tv.column(cols[2], anchor='center', width=60)
-        tv.column(cols[3], anchor='center', width=60)
-        tv.column(cols[4], anchor='center', width=20)
-        tv.column(cols[5], anchor='center', width=40)
-        tv.column(cols[6], anchor='center', width=20)
-        tv.column(cols[7], anchor='w', width=15)
+        for idx, col in enumerate(cols):
+            tv.column(col, anchor=a[idx], width=w[idx])
 
         ## Heading rows
         tv.heading('#0', text='', anchor='center')
-        tv.heading(cols[0], text='VIN', anchor='center')
-        tv.heading(cols[1], text="Year", anchor='center')
-        tv.heading(cols[2], text="Make", anchor='center')
-        tv.heading(cols[3], text="Model", anchor='center')
-        tv.heading(cols[4], text="Engine", anchor='center')
-        tv.heading(cols[5], text="Mileage", anchor='center')
-        tv.heading(cols[6], text="Plate", anchor='center')
-        tv.heading(cols[7], text="Datecode", anchor='center')
+        for idx, col in enumerate(cols):
+            tv.heading(col, text=col, anchor=a[idx])
+
         tv.bind('<Double-1>', self.onDoubleClick)
         tv.grid(column=0, row=4, columnspan=9, sticky='we')
         return tv
