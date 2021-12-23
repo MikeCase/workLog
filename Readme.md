@@ -6,7 +6,8 @@ by vin, and assigns labor logs to each vin. Each labor log will contain diagnost
 
 It's intended use really comes into play in the future when you run across a similar problem and can refer to your "notes" perse. 
 # Features
-* Vehicle Idendification Number decoding. VIA NHTSA database. 
+* Vehicle Idendification Number decoding. VIA NHTSA database.
+* Create, Update and Delete vehicles from the database.
 * Thats about it for now.. 
 
 ## Future features (to be updated often)

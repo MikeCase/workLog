@@ -84,7 +84,7 @@ class VehicleInfoScreen(tk.Frame):
 
         ## Treeview
 
-        self.tv = self.makeTreeView(self, tv_cols, anchor=tv_anchors, width=tv_widths)
+        self.tv = self.makeTreeView(self, tv_cols, width=tv_widths)
         
 
         self.listVehicle()
@@ -99,12 +99,17 @@ class VehicleInfoScreen(tk.Frame):
         ## Fails if not defined, obviously.. 
         ## Maybe a try statement and if that fails catch 
         ## the KeyError and fill in the values w/a default?
-        if kwargs['anchor']:
+        try:
             a = kwargs['anchor']
-        else:
-            a = []
-            for i in cols.len():
-                a.append('center')
+        except KeyError:
+            a = [a.append('center') for i in range(len(cols))]
+
+        # if kwargs['anchor']:
+        #     a = kwargs['anchor']
+        # else:
+        #     a = []
+        #     for i in cols.len():
+        #         a.append('center')
 
         ## same as above.
         if kwargs['width']:
@@ -119,7 +124,7 @@ class VehicleInfoScreen(tk.Frame):
         tv['columns'] = cols
         tv.column('#0', width=0, stretch='NO')
         for idx, col in enumerate(cols):
-            tv.column(col, anchor=a[idx], width=w[idx])
+            tv.column(col, anchor=b[idx], width=w[idx])
 
         ## Heading rows
         tv.heading('#0', text='', anchor='center')
