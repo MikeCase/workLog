@@ -15,7 +15,6 @@ class LaborInfoScreen(tk.Frame):
         self.padx = 3
         self.pady = 5
 
-        # print(self.parent.children.get('!vehicleinfoscreen').get_vin().get())
         self.laborDesc = StringVar()
         self.laborBookTime = StringVar()
         self.laborStartTime = StringVar()
@@ -28,25 +27,37 @@ class LaborInfoScreen(tk.Frame):
         self.textEntry(self, textvar=self.laborBookTime, row=3, column=0)
 
         self.label(self, textvar="Start Time:", row=0, column=1)
-        self.label(self, textvar=self.laborStartTime, row=0, column=2)
+        self.label(self, textvar=self.laborStartTime, row=1, column=1)
 
         self.label(self, textvar='Job Complete Time:', row=2, column=1)
-        self.label(self, textvar=self.laborFin, row=2, column=2)
+        self.label(self, textvar=self.laborFin, row=3, column=1)
 
         # self._initScreen()
 
-    def label(self, parent, textvar, row, column):
+    def label(self, *args, **kwargs):
+        parent = args[0]
+        textvar = kwargs['textvar']
+        row = kwargs['row']
+        col = kwargs['column']
+
+        """ Build and place a label widget """
+        ## First check to see if textvar is a tk.StringVar() type
         if type(textvar) == type(tk.StringVar()):
             label = ttk.Label(parent, textvariable=textvar)
-        else:
+        else: ## If not, just set regular text.
             label = ttk.Label(parent, text=textvar)
-
-        label.grid(row=row, column=column, padx=self.padx, pady=self.pady)
+        ## Set the grid
+        label.grid(row=row, column=col, padx=self.padx, pady=self.pady)
         return label
 
-    def textEntry(self, parent, textvar, row, column):
+    def textEntry(self, *args, **kwargs):
+        parent = args[0]
+        textvar = kwargs['textvar']
+        row = kwargs['row']
+        col = kwargs['column']
+
         textEntry = Entry(parent, textvariable=textvar)
-        textEntry.grid(row=row, column=column, padx=self.padx, pady=self.pady)
+        textEntry.grid(row=row, column=col, padx=self.padx, pady=self.pady)
         return textEntry
 
 

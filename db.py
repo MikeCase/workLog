@@ -59,9 +59,9 @@ class DB:
         session.commit()
 
     def getLabor(self, id):
-        print(f'{self.vin_to_id(id)} - getlabor method')
+        # print(f'{self.vin_to_id(id)} - getlabor method')
         record = session.query(VehInfo).filter(VehInfo.labor.any(vehicle_id = self.vin_to_id(id))).all()
-        print(record)
+        # print(record)
         if record != None:
             print(record[0].labor[0].vehicle_id)
             print(record[0].labor[0].job)
@@ -69,6 +69,6 @@ class DB:
             return record
 
     def vin_to_id(self, current_vin):
-        print(f'{current_vin} - vin_to_id method')
+        # print(f'{current_vin} - vin_to_id method')
         id = session.query(VehInfo).filter(VehInfo.vin.__eq__(current_vin)).first()
         return id.id
