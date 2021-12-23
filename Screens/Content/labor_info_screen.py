@@ -44,6 +44,8 @@ class LaborInfoScreen(tk.Frame):
             label = ttk.Label(parent, textvariable=textvar)
         else:
             label = ttk.Label(parent, text=textvar)
+
+        
         ## Set the widget in its grid position
         label.grid(row=row, column=col, padx=self.padx, pady=self.pady)
         return label
@@ -55,11 +57,12 @@ class LaborInfoScreen(tk.Frame):
         col = kwargs['column']
 
         try:
-            width = kwargs['width']
+            width = kwargs['width']                
             print(f'Width set to {kwargs["width"]}')
         except KeyError:
             print("Width not set, setting a default value")
             width = 20
+
 
         textEntry = Entry(parent, textvariable=textvar, width=width)
         textEntry.grid(row=row, column=col, padx=self.padx, pady=self.pady)
