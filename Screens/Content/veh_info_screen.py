@@ -16,7 +16,7 @@ class VehicleInfoScreen(tk.Frame):
         self.db = db
         self.padx = 3
         self.pady = 5
-        
+
         self.vehYear = StringVar()
         self.vehMake = StringVar()
         self.vehModel = StringVar()
@@ -78,25 +78,25 @@ class VehicleInfoScreen(tk.Frame):
         tv = ttk.Treeview(parent)
         tv['columns'] = cols
         tv.column('#0', width=0, stretch='NO')
-        tv.column('VIN', anchor='w', width=80)
-        tv.column('Year', anchor='center', width=10)
-        tv.column('Make', anchor='center', width=60)
-        tv.column('Model', anchor='center', width=60)
-        tv.column('Engine', anchor='center', width=20)
-        tv.column('Mileage', anchor='center', width=40)
-        tv.column('Plate', anchor='center', width=20)
-        tv.column('Datecode', anchor='w', width=15)
+        tv.column(cols[0], anchor='w', width=80)
+        tv.column(cols[1], anchor='center', width=10)
+        tv.column(cols[2], anchor='center', width=60)
+        tv.column(cols[3], anchor='center', width=60)
+        tv.column(cols[4], anchor='center', width=20)
+        tv.column(cols[5], anchor='center', width=40)
+        tv.column(cols[6], anchor='center', width=20)
+        tv.column(cols[7], anchor='w', width=15)
 
         ## Heading rows
         tv.heading('#0', text='', anchor='center')
-        tv.heading('VIN', text='VIN', anchor='center')
-        tv.heading('Year', text="Year", anchor='center')
-        tv.heading('Make', text="Make", anchor='center')
-        tv.heading('Model', text="Model", anchor='center')
-        tv.heading('Engine', text="Engine", anchor='center')
-        tv.heading('Mileage', text="Mileage", anchor='center')
-        tv.heading('Plate', text="Plate", anchor='center')
-        tv.heading('Datecode', text="Datecode", anchor='center')
+        tv.heading(cols[0], text='VIN', anchor='center')
+        tv.heading(cols[1], text="Year", anchor='center')
+        tv.heading(cols[2], text="Make", anchor='center')
+        tv.heading(cols[3], text="Model", anchor='center')
+        tv.heading(cols[4], text="Engine", anchor='center')
+        tv.heading(cols[5], text="Mileage", anchor='center')
+        tv.heading(cols[6], text="Plate", anchor='center')
+        tv.heading(cols[7], text="Datecode", anchor='center')
         tv.bind('<Double-1>', self.onDoubleClick)
         tv.grid(column=0, row=4, columnspan=9, sticky='we')
         return tv
@@ -165,6 +165,9 @@ class VehicleInfoScreen(tk.Frame):
         for i in self.tv.get_children():
             self.tv.delete(i)
         vehicle = self.listVehicle()
+        self.parent.children.get('!laborinfoscreen')._update_screen()
+
+
 
     def listVehicle(self):
         vehicles = self.db.getVehicle()

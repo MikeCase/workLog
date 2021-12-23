@@ -58,15 +58,20 @@ class LaborInfoScreen(tk.Frame):
         self.laborFin.set(laborRecord.labor[0].finished)
 
     def _update_screen(self):
-        # print(self.veh_vin())
         laborRecord = self.db.getLabor(self.veh_vin())
 
-        # print(laborRecord[0].labor[0].start.strftime('%H:%M:%S'))
-        self.laborDesc.set(laborRecord[0].labor[0].job)
-        self.laborBookTime.set(laborRecord[0].labor[0].booktime)
-        self.laborStartTime.set(laborRecord[0].labor[0].start.strftime('%H:%M:%S'))
-        self.laborFin.set(laborRecord[0].labor[0].finished)
-        print(self.laborStartTime.get())
+        job_title = laborRecord[0].labor[0].job
+        job_booktime = laborRecord[0].labor[0].booktime
+        job_start = laborRecord[0].labor[0].start.strftime('%H:%M:%S')
+        job_finished = laborRecord[0].labor[0].finished
+
+        self.laborDesc.set(job_title)
+        self.laborBookTime.set(job_booktime)
+        self.laborStartTime.set(job_start)
+        if job_finished: 
+            self.laborFin.set(job_finished.strftime('%H:%M:%S'))
+        else:
+            self.laborFin.set('')
 
     def veh_vin(self):
         return self.parent.children.get('!vehicleinfoscreen').get_vin().get()

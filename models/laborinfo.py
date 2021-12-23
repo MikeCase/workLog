@@ -20,7 +20,7 @@ class LaborInfo(Base):
     vehicle_id = Column(Integer, ForeignKey('Vehicle.id'))
     # vehicle = relationship('VehInfo', uselist=False, back_populates="Labor")
     
-    def __init__(self, job, booktime, start,  diag=None, finish='',) -> None:
+    def __init__(self, job, booktime, start,  diag=None, finish=None,) -> None:
         self.job = job
         self.booktime = booktime
         self.start = start
