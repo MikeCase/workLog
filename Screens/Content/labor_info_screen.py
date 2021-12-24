@@ -20,11 +20,13 @@ class LaborInfoScreen(tk.Frame):
         self.label(self, textvar='Job Description', row=0, column=0)
         # self.textEntry(self, textvar=self.laborDesc, row=1, column=0, width=25)
         self.txt_desc = tk.Text(self,  width=80, height=3)
-        self.txt_desc.grid(row=1, column=0, columnspan=12)
+        self.txt_desc.grid(row=1, column=0, columnspan=12, sticky='w')
         
 
         self.label(self, textvar='Booktime: ', row=2, column=0)
-        self.label(self, textvar=self.laborBookTime, row=2, column=1)
+        # self.label(self, textvar=self.laborBookTime, row=2, column=1)
+        self.lbl_booktime = tk.Label(self, textvariable=self.laborBookTime, anchor='w', justify='left')
+        self.lbl_booktime.grid(row=2, column=1, sticky='w')
 
         self.label(self, textvar="Start Time:", row=2, column=2)
         self.label(self, textvar=self.laborStartTime, row=2, column=3)
@@ -32,7 +34,56 @@ class LaborInfoScreen(tk.Frame):
         self.label(self, textvar='Job Complete Time:', row=2, column=4)
         self.label(self, textvar=self.laborFin, row=2, column=5)
 
+        self.btn_btime = tk.Button(self, text="Set Book Time", command=self.btime)
+        self.btn_btime.grid(row=3, column=0)
+        self.btn_start = tk.Button(self, text="Start Job", command=self.start_job)
+        self.btn_start.grid(row=3, column=2)
+        self.btn_complete = tk.Button(self, text="Complete Job", command=self.complete_job)
+        self.btn_complete.grid(row=3, column=4)
         # self._initScreen()
+
+        self.dtc_lf = ttk.LabelFrame(self, text="DTC's")
+        self.dtc_lf.grid(row=4, column=0, columnspan=6, rowspan=4, pady=self.pady)
+
+        self.dtc_treeview = ttk.Treeview(self.dtc_lf)
+        self.dtc_treeview['columns'] = ('Code', 'Description')
+        self.dtc_treeview.column('#0', width=0, stretch='NO')
+        self.dtc_treeview.column('Code', anchor='w')
+        self.dtc_treeview.column('Description', anchor='w')
+        self.dtc_treeview.heading('#0', text='', anchor='center')
+        self.dtc_treeview.heading('Code', text='Code', anchor='w')
+        self.dtc_treeview.heading('Description', text='Description', anchor='w')
+        self.dtc_treeview.grid(row=0, column=0, columnspan=2, )
+        
+        self.btn_dtc_add = tk.Button(self.dtc_lf, text='Add DTC')
+        self.btn_dtc_add.grid(row=1, column=0, padx=self.padx, pady=self.pady)
+
+        self.btn_dtc_rem = tk.Button(self.dtc_lf, text='Remove DTC')
+        self.btn_dtc_rem.grid(row=1, column=1, padx=self.padx, pady=self.pady)
+        
+        self.diag_lf = ttk.LabelFrame(self, text='Diag Notes')
+        self.diag_lf.grid(row=4, column=6, columnspan=6, rowspan=4, pady=self.pady)
+
+
+        self.diag_treeview = ttk.Treeview(self.diag_lf)
+        self.diag_treeview['columns'] = ('Note#', 'Description')
+        self.diag_treeview.column('#0', width=0, stretch='NO')
+        self.diag_treeview.column('Note#', anchor='w')
+        self.diag_treeview.column('Description', anchor='w')
+        self.diag_treeview.heading('#0', text='', anchor='center')
+        self.diag_treeview.heading('Note#', text='Note #', anchor='w')
+        self.diag_treeview.heading('Description', text='Description', anchor='w')
+        self.diag_treeview.grid(row=0, column=0, columnspan=2, )
+
+        
+        self.btn_diag_add = tk.Button(self.diag_lf, text='Add Diag Note')
+        self.btn_diag_add.grid(row=1, column=0, padx=self.padx, pady=self.pady)
+        
+        self.btn_diag_rem = tk.Button(self.diag_lf, text='Remove Diag Note')
+        self.btn_diag_rem.grid(row=1, column=1, padx=self.padx, pady=self.pady)
+
+
+
 
     def label(self, *args, **kwargs):
         """ Build and place a label widget """
@@ -110,3 +161,32 @@ class LaborInfoScreen(tk.Frame):
 
     def veh_vin(self):
         return self.parent.children.get('!vehicleinfoscreen').get_vin().get()
+
+    def btime(self):
+        top = tk.Toplevel(self.controller)
+        top.geometry('150x100')
+        top.transient(self.controller)
+        booktime = StringVar()
+
+        dlg_label = tk.Label(top, text='Please enter the book time')
+        dlg_label.grid(row=0, column=0, columnspan=2, padx=self.padx, pady=self.pady)
+        entry = tk.Entry(top, width=8, textvariable=booktime)
+        entry.grid(row=1, column=0, columnspan=2, padx=self.padx, pady=self.pady)
+        button = tk.Button(top, text='Set Book Time', command=lambda: set_booktime())
+        button.grid(row=2, column=0, padx=self.padx, pady=self.pady)
+        btn_cancel = tk.Button(top, text="Cancel", command=lambda: cancel_btn())
+        btn_cancel.grid(row=2, column=1, padx=self.padx, pady=self.pady)
+
+        # return top
+        def set_booktime():
+            self.laborBookTime.set(booktime.get())
+            top.destroy()
+
+        def cancel_btn():
+            top.destroy()
+
+    def start_job(self):
+        pass
+
+    def complete_job(self):
+        pass
