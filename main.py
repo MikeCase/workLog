@@ -35,9 +35,6 @@ class Main(tk.Tk):
     def show_frames(self, cont, frames):
         for frame in frames:
             cont.add(frame)
-        # frame = self.frames[cont]
-        # self.container.add(frame)
-        # frame.tkraise()
 
 
 if __name__ == "__main__":

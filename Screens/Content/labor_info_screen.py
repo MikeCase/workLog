@@ -18,16 +18,19 @@ class LaborInfoScreen(tk.Frame):
         
         ## Frame Layout
         self.label(self, textvar='Job Description', row=0, column=0)
-        self.textEntry(self, textvar=self.laborDesc, row=1, column=0, width=25)
+        # self.textEntry(self, textvar=self.laborDesc, row=1, column=0, width=25)
+        self.txt_desc = tk.Text(self,  width=80, height=3)
+        self.txt_desc.grid(row=1, column=0, columnspan=12)
+        
 
-        self.label(self, textvar='Book time for job', row=2, column=0)
-        self.textEntry(self, textvar=self.laborBookTime, row=3, column=0)
+        self.label(self, textvar='Booktime: ', row=2, column=0)
+        self.label(self, textvar=self.laborBookTime, row=2, column=1)
 
-        self.label(self, textvar="Start Time:", row=0, column=1)
-        self.label(self, textvar=self.laborStartTime, row=1, column=1)
+        self.label(self, textvar="Start Time:", row=2, column=2)
+        self.label(self, textvar=self.laborStartTime, row=2, column=3)
 
-        self.label(self, textvar='Job Complete Time:', row=2, column=1)
-        self.label(self, textvar=self.laborFin, row=3, column=1)
+        self.label(self, textvar='Job Complete Time:', row=2, column=4)
+        self.label(self, textvar=self.laborFin, row=2, column=5)
 
         # self._initScreen()
 
@@ -47,8 +50,11 @@ class LaborInfoScreen(tk.Frame):
 
         
         ## Set the widget in its grid position
-        label.grid(row=row, column=col, padx=self.padx, pady=self.pady)
+        label.grid(row=row, column=col, padx=self.padx, pady=self.pady, sticky='w')
         return label
+
+    def text_entry_multi(self, *args, **kwargs):
+        parent = args[0]
 
     def textEntry(self, *args, **kwargs):
         parent = args[0]
@@ -63,9 +69,18 @@ class LaborInfoScreen(tk.Frame):
             print("Width not set, setting a default value")
             width = 20
 
+        try:
+            colspan = kwargs['colspan']
+        except:
+            colspan = None
+        
+        try:
+            sticky = kwargs['sticky']
+        except:
+            sticky = None
 
         textEntry = Entry(parent, textvariable=textvar, width=width)
-        textEntry.grid(row=row, column=col, padx=self.padx, pady=self.pady)
+        textEntry.grid(row=row, column=col, padx=self.padx, pady=self.pady, columnspan=colspan, sticky=sticky)
         return textEntry
 
 
@@ -85,6 +100,7 @@ class LaborInfoScreen(tk.Frame):
         job_finished = laborRecord[0].labor[0].finished
 
         self.laborDesc.set(job_desc)
+        self.txt_desc.insert(tk.END, self.laborDesc.get())
         self.laborBookTime.set(job_booktime)
         self.laborStartTime.set(job_start)
         if job_finished: 
