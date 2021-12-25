@@ -19,14 +19,14 @@ class LaborInfoScreen(tk.Frame):
         ## Frame Layout
         self.label(self, textvar='Job Description', row=0, column=0)
         # self.textEntry(self, textvar=self.laborDesc, row=1, column=0, width=25)
-        self.txt_desc = tk.Text(self,  width=80, height=3)
+        self.txt_desc = tk.Text(self, width=80, height=3)
         self.txt_desc.grid(row=1, column=0, columnspan=12, sticky='w')
         
 
         self.label(self, textvar='Booktime: ', row=2, column=0)
-        # self.label(self, textvar=self.laborBookTime, row=2, column=1)
-        self.lbl_booktime = tk.Label(self, textvariable=self.laborBookTime, anchor='w', justify='left')
-        self.lbl_booktime.grid(row=2, column=1, sticky='w')
+        self.label(self, textvar=self.laborBookTime, row=2, column=1)
+        # self.lbl_booktime = tk.Label(self, textvariable=self.laborBookTime, anchor='w', justify='left')
+        # self.lbl_booktime.grid(row=2, column=1, sticky='w')
 
         self.label(self, textvar="Start Time:", row=2, column=2)
         self.label(self, textvar=self.laborStartTime, row=2, column=3)
@@ -143,6 +143,7 @@ class LaborInfoScreen(tk.Frame):
         self.laborFin.set(laborRecord.labor[0].finished)
 
     def _update_screen(self):
+        self.txt_desc.delete('1.0', tk.END)
         laborRecord = self.db.getLabor(self.veh_vin())
 
         job_desc = laborRecord[0].labor[0].job
