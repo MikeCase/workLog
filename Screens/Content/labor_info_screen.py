@@ -40,7 +40,6 @@ class LaborInfoScreen(tk.Frame):
         self.btn_start.grid(row=3, column=2)
         self.btn_complete = tk.Button(self, text="Complete Job", command=self.complete_job)
         self.btn_complete.grid(row=3, column=4)
-        # self._initScreen()
 
         self.dtc_lf = ttk.LabelFrame(self, text="DTC's")
         self.dtc_lf.grid(row=4, column=0, columnspan=6, rowspan=4, pady=self.pady)
@@ -181,6 +180,7 @@ class LaborInfoScreen(tk.Frame):
         # return top
         def set_booktime():
             self.laborBookTime.set(booktime.get())
+            
             top.destroy()
 
         def cancel_btn():

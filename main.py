@@ -31,10 +31,10 @@ class Main(tk.Tk):
             if F == CompletedScreen:
                 container.add(self.frames[F], text='Completed Jobs')
         # self.show_frames(container, self.frames)
-
-    def show_frames(self, cont, frames):
-        for frame in frames:
-            cont.add(frame)
+        
+    # def show_frames(self, cont, frames):
+    #     for frame in frames:
+    #         cont.add(frame)
 
 
 if __name__ == "__main__":
