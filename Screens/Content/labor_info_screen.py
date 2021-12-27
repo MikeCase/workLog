@@ -10,7 +10,8 @@ class LaborInfoScreen(tk.Frame):
         self.db = db
         self.padx = 3
         self.pady = 5
-
+        
+        
         self.laborDesc = StringVar()
         self.laborBookTime = StringVar()
         self.laborStartTime = StringVar()
@@ -174,16 +175,12 @@ class LaborInfoScreen(tk.Frame):
         entry.grid(row=1, column=0, columnspan=2, padx=self.padx, pady=self.pady)
         button = tk.Button(top, text='Set Book Time', command=lambda: set_booktime())
         button.grid(row=2, column=0, padx=self.padx, pady=self.pady)
-        btn_cancel = tk.Button(top, text="Cancel", command=lambda: cancel_btn())
+        btn_cancel = tk.Button(top, text="Cancel", command=lambda: top.destroy())
         btn_cancel.grid(row=2, column=1, padx=self.padx, pady=self.pady)
 
         # return top
         def set_booktime():
             self.laborBookTime.set(booktime.get())
-            
-            top.destroy()
-
-        def cancel_btn():
             top.destroy()
 
     def start_job(self):
