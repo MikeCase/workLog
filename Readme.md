@@ -8,7 +8,10 @@ It's intended use really comes into play in the future when you run across a sim
 # Features
 * Vehicle Idendification Number decoding. VIA NHTSA database.
 * Create, Update and Delete vehicles from the database.
-* Thats about it for now.. 
+* List labor related to that vehicle. 
 
-## Future features (to be updated often)
-* Interface with OBD via an opensource OBD dongle to help with the diagnostic dataloggins process
+
+## Future features 
+* Interface with OBD via an opensource OBD dongle to help with the diagnostic data-logging process.
+
+

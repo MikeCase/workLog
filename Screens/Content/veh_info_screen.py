@@ -119,7 +119,7 @@ class VehicleInfoScreen(tk.Frame):
 
         try:
             w = kwargs['width']
-        except:
+        except KeyError:
             w = []
             for _, i in enumerate(cols):
                 w.append('40')
