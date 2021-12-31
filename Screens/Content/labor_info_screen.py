@@ -18,29 +18,31 @@ class LaborInfoScreen(tk.Frame):
         self.laborFin = StringVar()
         
         ## Frame Layout
-        self.label(self, textvar='Job Description', row=0, column=0)
-        self.txt_desc = tk.Text(self, width=80, height=3)
-        self.txt_desc.grid(row=1, column=0, columnspan=12, sticky='w')
+        self.labor_lf = ttk.LabelFrame(self, text="Labor")
+        self.labor_lf.grid(row=0, column=0, rowspan=4, columnspan=12, padx=self.padx, pady=self.pady)
+        self.label(self.labor_lf, textvar='Job Description', row=0, column=0)
+        self.txt_desc = tk.Text(self.labor_lf, width=80, height=3)
+        self.txt_desc.grid(row=1, column=0, columnspan=6, sticky='w')
         
 
-        self.label(self, textvar='Booktime: ', row=2, column=0)
-        self.label(self, textvar=self.laborBookTime, row=2, column=1)
+        self.label(self.labor_lf, textvar='Booktime: ', row=2, column=0)
+        self.label(self.labor_lf, textvar=self.laborBookTime, row=2, column=1)
 
-        self.label(self, textvar="Start Time:", row=2, column=2)
-        self.label(self, textvar=self.laborStartTime, row=2, column=3)
+        self.label(self.labor_lf, textvar="Start Time:", row=2, column=2)
+        self.label(self.labor_lf, textvar=self.laborStartTime, row=2, column=3)
 
-        self.label(self, textvar='Job Complete Time:', row=2, column=4)
-        self.label(self, textvar=self.laborFin, row=2, column=5)
+        self.label(self.labor_lf, textvar='Job Complete Time:', row=2, column=4)
+        self.label(self.labor_lf, textvar=self.laborFin, row=2, column=5)
 
-        self.btn_btime = tk.Button(self, text="Set Book Time", command=self.btime)
+        self.btn_btime = tk.Button(self.labor_lf, text="Set Book Time", command=self.btime)
         self.btn_btime.grid(row=3, column=0)
-        self.btn_start = tk.Button(self, text="Start Job", command=self.start_job)
+        self.btn_start = tk.Button(self.labor_lf, text="Start Job", command=self.start_job)
         self.btn_start.grid(row=3, column=2)
-        self.btn_complete = tk.Button(self, text="Complete Job", command=self.complete_job)
+        self.btn_complete = tk.Button(self.labor_lf, text="Complete Job", command=self.complete_job)
         self.btn_complete.grid(row=3, column=4)
 
         self.dtc_lf = ttk.LabelFrame(self, text="DTC's")
-        self.dtc_lf.grid(row=4, column=0, columnspan=6, rowspan=4, pady=self.pady)
+        self.dtc_lf.grid(row=4, column=0, columnspan=6, rowspan=4, padx=self.padx, pady=self.pady)
 
         self.dtc_treeview = ttk.Treeview(self.dtc_lf)
         self.dtc_treeview['columns'] = ('Code', 'Description')
@@ -59,7 +61,7 @@ class LaborInfoScreen(tk.Frame):
         self.btn_dtc_rem.grid(row=1, column=1, padx=self.padx, pady=self.pady)
         
         self.diag_lf = ttk.LabelFrame(self, text='Diag Notes')
-        self.diag_lf.grid(row=4, column=6, columnspan=6, rowspan=4, pady=self.pady)
+        self.diag_lf.grid(row=4, column=6, columnspan=6, rowspan=4, padx=self.padx, pady=self.pady)
 
 
         self.diag_treeview = ttk.Treeview(self.diag_lf)
