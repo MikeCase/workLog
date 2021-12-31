@@ -1,15 +1,16 @@
 import tkinter as tk
 from tkinter import Entry, StringVar, ttk
-
+import obd
 
 class LaborInfoScreen(tk.Frame):
-    def __init__(self, parent, controller, db) -> None:
+    def __init__(self, parent, controller, db, obd_connection=None) -> None:
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.parent = parent
         self.db = db
         self.padx = 3
         self.pady = 5
+        self.con = obd_connection
         
         
         self.laborDesc = StringVar()
@@ -81,7 +82,7 @@ class LaborInfoScreen(tk.Frame):
         self.btn_diag_rem = tk.Button(self.diag_lf, text='Remove Diag Note')
         self.btn_diag_rem.grid(row=1, column=1, padx=self.padx, pady=self.pady)
 
-
+        self.obd_get_dtcs()
 
 
     def label(self, *args, **kwargs):
@@ -187,3 +188,10 @@ class LaborInfoScreen(tk.Frame):
 
     def complete_job(self):
         pass
+
+    def obd_get_dtcs(self):
+        if self.con != None:
+            resp = self.con.query(obd.commands.GET_DTC)
+            print(resp.value)
+            for i in resp.value:
+                self.dtc_treeview.insert('', 'end', values=i)

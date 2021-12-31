@@ -3,11 +3,11 @@ from tkinter import Entry, StringVar, ttk
 import requests
 from sqlalchemy.sql.expression import column
 from pprint import pprint
-
+import obd
 
 class VehicleInfoScreen(tk.Frame):
     
-    def __init__(self, parent, controller, db) -> None:
+    def __init__(self, parent, controller, db, obd_connection=None) -> None:
         """Vehicle Info Screen
 
         Args:
@@ -19,6 +19,7 @@ class VehicleInfoScreen(tk.Frame):
         self.parent = parent
         self.controller = controller
         self.db = db
+        self.con = obd_connection
         self.padx = 3
         self.pady = 5
 
@@ -96,7 +97,7 @@ class VehicleInfoScreen(tk.Frame):
         
 
         self.listVehicle()
-
+        self.obd_get_vin()
 
     # Methods
 
@@ -265,3 +266,9 @@ class VehicleInfoScreen(tk.Frame):
 
     def set_vin(self, newVin):
         self.vehVin = newVin
+
+    def obd_get_vin(self):
+        if self.con != None:
+            resp = self.con.query(obd.commands.VIN)
+            print(resp.value.decode())
+            self.vehVin.set(resp.value.decode())
