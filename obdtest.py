@@ -4,10 +4,12 @@ conn = obd.OBD()
 
 
 cmd = {
+    # 'base_commands': obd.commands.base_commands(),
     '1-20': obd.commands.PIDS_A,
     'vin': obd.commands.VIN,
     'dtc': obd.commands.GET_DTC,
     'oil_temp': obd.commands.OIL_TEMP,
+    'coolant_temp': obd.commands.COOLANT_TEMP,
     'ambiant_air_temp': obd.commands.AMBIANT_AIR_TEMP,
     'intake_press': obd.commands.INTAKE_PRESSURE,
     'fuel_pressure': obd.commands.FUEL_PRESSURE,
@@ -62,19 +64,56 @@ cmd = {
     'cat_temp_b2s1': obd.commands.CATALYST_TEMP_B2S1,
     'cat_temp_b2s2': obd.commands.CATALYST_TEMP_B2S2,
     'status_drive_cycle': obd.commands.STATUS_DRIVE_CYCLE,
+    'control_module_voltage': obd.commands.CONTROL_MODULE_VOLTAGE,
+    'absolute_load': obd.commands.ABSOLUTE_LOAD,
+    'commanded_equiv_ratio': obd.commands.COMMANDED_EQUIV_RATIO,
+    'relative_throttle_pos': obd.commands.RELATIVE_THROTTLE_POS,
+    'ambiant_air_temp': obd.commands.AMBIANT_AIR_TEMP,
+    'throttle_pos_b': obd.commands.THROTTLE_POS_B,
+    'fuel_rail_pressure_absolute': obd.commands.FUEL_RAIL_PRESSURE_ABS,
+    'fuel_injection_timing': obd.commands.FUEL_INJECT_TIMING,
+    'obd_voltage': obd.commands.ELM_VOLTAGE,
+    'elm_version': obd.commands.ELM_VERSION,
+
+
+
+
 
 }
-
+# obd.commands.base_commands()
 for id,command in cmd.items():
-    if obd.commands.has_command(command):
+    # if conn.supports(command):
+    if "1-20" in id:
         resp = conn.query(command)
-    # if 'is not supported' in resp:
-    #     pass
-        if not 'is not supported' in resp.messages:
-            print(f'{id}: ', resp.value)
-        # else:
-            # print(f'{id}: ', 'Not Supported')
-# cmd = obd.commands.RUN_TIME
-# resp = conn.query(cmd)
-# print(resp.value.to('minutes'))
-# print('VIN' in obd.commands)
+        print(f'{id}, {resp.command.name}')
+    resp = conn.query(command, force=True)
+    # if resp.unit == 'degC':
+    #     print(f'{resp.command.desc}: {resp.value.to("fahrenheit")}')
+    # elif resp.unit == 'kph':
+    #     print(f'{resp.command.desc}: {resp.value.to("mph")}')
+    # elif resp.unit == 'kilometer':
+    #     print(f'{resp.command.desc}: {resp.value.to("mile")}')
+    # elif resp.unit == 'second':
+    #     print(f'{resp.command.desc}: {resp.value.to("hour")}')
+    # else:
+    #     print(f'{resp.command.desc}: {resp.value}')
+
+    if "Monitor status" in resp.command.desc:
+        print(f'{resp.command.desc}: ', resp.value.FUEL_SYSTEM_MONITORING.available)
+
+# import obd
+# import time
+
+# connection = obd.Async()
+
+# # a callback that prints every new value to the console
+# def new_rpm(r):
+#     print(r.value)
+
+# connection.watch(obd.commands.SHORT_FUEL_TRIM_1, callback=new_rpm)
+# connection.start()
+
+# # the callback will now be fired upon receipt of new values
+
+# time.sleep(60)
+# connection.stop()
