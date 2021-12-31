@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import Entry, StringVar, ttk
-import obd
+# import obd
 
 class LaborInfoScreen(tk.Frame):
     def __init__(self, parent, controller, db, obd_connection=None) -> None:
@@ -20,10 +20,10 @@ class LaborInfoScreen(tk.Frame):
         
         ## Frame Layout
         self.labor_lf = ttk.LabelFrame(self, text="Labor")
-        self.labor_lf.grid(row=0, column=0, rowspan=4, columnspan=12, padx=self.padx, pady=self.pady)
+        self.labor_lf.grid(row=0, column=0, rowspan=4, columnspan=12, padx=self.padx, pady=self.pady, sticky="ew")
         self.label(self.labor_lf, textvar='Job Description', row=0, column=0)
         self.txt_desc = tk.Text(self.labor_lf, width=80, height=3)
-        self.txt_desc.grid(row=1, column=0, columnspan=6, sticky='w')
+        self.txt_desc.grid(row=1, column=0, columnspan=12, sticky='ew')
         
 
         self.label(self.labor_lf, textvar='Booktime: ', row=2, column=0)
@@ -190,7 +190,7 @@ class LaborInfoScreen(tk.Frame):
         pass
 
     def obd_get_dtcs(self):
-        if self.con != None:
+        if self.con is not None:
             resp = self.con.query(obd.commands.GET_DTC)
             print(resp.value)
             for i in resp.value:

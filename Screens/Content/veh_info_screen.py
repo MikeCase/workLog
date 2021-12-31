@@ -3,7 +3,7 @@ from tkinter import Entry, StringVar, ttk
 import requests
 from sqlalchemy.sql.expression import column
 from pprint import pprint
-import obd
+# import obd
 
 class VehicleInfoScreen(tk.Frame):
     
@@ -162,7 +162,7 @@ class VehicleInfoScreen(tk.Frame):
         button = ttk.Button(parent, text=text, command=command)
         button.grid(column=gridcol, row=gridrow, padx=self.padx, pady=self.pady)
 
-    def label(self, parent, text, row, column, binder=None):
+    def label(self, parent, text, row, column):
         label = ttk.Label(parent, text=text)
 
         label.grid(row=row, column=column, padx=self.padx, pady=self.pady)

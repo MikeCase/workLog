@@ -1,3 +1,4 @@
+import sys
 import tkinter as tk
 from tkinter import ttk
 from Screens.Content.veh_info_screen import VehicleInfoScreen
@@ -6,11 +7,12 @@ from Screens.Content.in_progress_screen import InProgressScreen
 from Screens.Content.completed_screen import CompletedScreen
 from db import DB
 
+
 ### Maybe this works? I dont know, I'm to lazy to look it up atm. 
 ### VVVVVVVV
 try:
     import obd
-except: 
+except ImportError: 
     print('OBD Module not installed, OBD connections won\'t work')
 ### End maybe.. research this shit. 
 
@@ -20,7 +22,11 @@ class Main(tk.Tk):
         tk.Tk.title(self, "Mechanics Work Log")
         # tk.Tk.iconphoto()
         self.db = DB()
-        self.con = obd.OBD()
+        if "obd" in sys.modules:
+            self.con = obd.OBD()
+        else:
+            self.con = None
+        
         container = ttk.Notebook(self)
         container.pack(fill='both', expand=True)
         container.grid_rowconfigure(0, weight=1)
@@ -28,7 +34,7 @@ class Main(tk.Tk):
 
         self.frames = {}
         for F in (VehicleInfoScreen, LaborInfoScreen, InProgressScreen, CompletedScreen):
-            if self.con.is_connected():
+            if self.con is not None and self.con.is_connected():
                 frame = F(container, self, self.db, self.con)
             else:
                 frame = F(container, self, self.db)
